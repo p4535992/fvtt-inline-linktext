@@ -60,9 +60,9 @@ function _doEnrich(wrapped, content, options) {
 			if (extratext) {
 				if (extratext.startsWith('<p>') && extratext.endsWith('</p>') &&
 					extratext.lastIndexOf('<p>') === 0) {0
-					extratext = '<span style="background: lightgreen; margin-left: 0.5em">' + extratext.slice(3, -4) + '</span>';
+					extratext = `<span class="inline${doctype}">` + extratext.slice(3, -4) + '</span>';
 				} else {
-					extratext = '<div style="background: lightgreen">' + extratext + '</div>';
+					extratext = `<div class="inline${doctype}">` + extratext + '</div>';
 				}
 			}
 		}
@@ -77,6 +77,6 @@ function _doEnrich(wrapped, content, options) {
 
 Hooks.once('ready', () => {
 	// Only check for link visibility if NOT a gm
-	console.warn(`linline-linktext: ready hook`);
+	console.warn(`inline-linktext: ready hook`);
 	libWrapper.register('inline-linktext', 'TextEditor.enrichHTML', _doEnrich, 'WRAPPER');
 })

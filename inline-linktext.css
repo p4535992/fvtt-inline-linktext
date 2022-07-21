@@ -1,0 +1,13 @@
+div.inlineItem {
+    background: lightgreen;
+}
+span.inlineItem {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background: lightgreen;
+}
+div.inlineItem span.inlineItem {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background: lightblue;
+}
