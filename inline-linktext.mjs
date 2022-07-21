@@ -13,6 +13,25 @@ const _EntityMap = {
 	//"Compendium"   : "packs",   // Getting the contents is ASYNC, so won't work for a synchronous enrichHTML
 };
 
+let FieldOfDocument = {
+	"JournalEntry" : "data.content",
+	"Actor"        : "data.data.description",
+	"RollTable"    : "data.data.description",
+	"Scene"        : "data.data.description",
+	"Item"         : "data.data.description",
+	"Compendium"   : "data.data.description",
+}
+
+function getField(document, fieldstring)
+{
+	let parts = fieldstring.split('.');
+	for (let part of parts) {
+		document = document[part];
+		if (!document) break;
+	}
+	return document;
+}
+
 /**
  * 
  * @param {string} docid The id-string as used in @Compendium[...] marker.
@@ -56,13 +75,13 @@ function _doEnrich(wrapped, content, options) {
 			// But readpack is ASYNC because of... Compendiums...
 			// and so this function can't wait for it to finish :-(
 			let doc = (table === 'packs') ? readpack(docid) : game[table]?.get(docid);
-			if (doc) extratext = doc.data?.data?.description;  // for Item from CypherSystem
+			if (doc) extratext = getField(doc, FieldOfDocument[doctype]);
 			if (extratext) {
 				if (extratext.startsWith('<p>') && extratext.endsWith('</p>') &&
 					extratext.lastIndexOf('<p>') === 0) {0
-					extratext = `<span class="inline${doctype}">` + extratext.slice(3, -4) + '</span>';
+					extratext = `<span class="inlineDocument inline${doctype}">` + extratext.slice(3, -4) + '</span>';
 				} else {
-					extratext = `<div class="inline${doctype}">` + extratext + '</div>';
+					extratext = `<div class="inlineDocument inline${doctype}">` + extratext + '</div>';
 				}
 			}
 		}

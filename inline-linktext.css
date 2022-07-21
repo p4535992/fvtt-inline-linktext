@@ -1,13 +1,10 @@
-div.inlineItem {
+.inlineDocument {
     background: lightgreen;
 }
-span.inlineItem {
+span.inlineDocument {
     margin-left: 0.5em;
     margin-right: 0.5em;
-    background: lightgreen;
 }
-div.inlineItem span.inlineItem {
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+.inlineDocument .inlineDocument {
     background: lightblue;
 }
