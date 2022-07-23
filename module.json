@@ -27,7 +27,7 @@
         {
             "lang": "en",
             "Name": "English",
-            "path": "lang/en.json"
+            "path": "/lang/en.json"
         }
     ],
     "dependencies": [
