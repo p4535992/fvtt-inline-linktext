@@ -10,7 +10,7 @@ const _EntityMap = {
 	"RollTable"    : "tables",
 	"Scene"        : "scenes",
 	"Item"         : "items",
-	//"Compendium"   : "packs",   // Getting the contents is ASYNC, so won't work for a synchronous enrichHTML
+	"Compendium"   : "packs",   // Getting the contents is ASYNC, so won't work for a synchronous enrichHTML
 };
 
 let FieldOfDocument = {
@@ -19,8 +19,9 @@ let FieldOfDocument = {
 	"RollTable"    : "data.data.description",
 	"Scene"        : "data.data.description",
 	"Item"         : "data.data.description",
-	"Compendium"   : "data.data.description",
 }
+
+const DEFERRED_MSG = '<span class="inlineReload">{Reload to read text from Compendium}</span>';
 
 function getField(document, fieldstring)
 {
@@ -37,7 +38,7 @@ function getField(document, fieldstring)
  * @param {string} docid The id-string as used in @Compendium[...] marker.
  * @returns Promise containing the Document retrieved from the compendium
  */
-async function readpack(docid)
+function readpack(docid)
 {
 	// TextEditor.enrichHTML is not async, so we can't access Compendiums - BOO
 	const mark = docid.lastIndexOf('.');
@@ -45,7 +46,17 @@ async function readpack(docid)
 		const packname = docid.slice(0,mark);
 		const packid   = docid.slice(mark+1);
 		// only getDocument is async
-		return await game.packs.get(packname)?.getDocument(packid);
+		const pack = game.packs.get(packname);
+		if (pack) {
+			const cached = pack.get(packid);
+			if (cached instanceof foundry.abstract.Document) 
+				return {
+					"type": pack.metadata.type,
+					"document": cached
+				};
+			else
+				return pack.getDocument(packid); // Promise
+		}
 	}
 	return undefined;
 }
@@ -67,21 +78,34 @@ function _doEnrich(wrapped, content, options) {
 
 		let extratext="";
 		const matching = found[0];	// full matching string
-		const doctype  = found[1];	// the type of document that has been inlined	
+		let   doctype  = found[1];	// the type of document that has been inlined	
 		const docid    = found[2];	// the ID of the thing that is being inline
 		const table = _EntityMap[doctype];
 		if (table)
 		{
 			// But readpack is ASYNC because of... Compendiums...
 			// and so this function can't wait for it to finish :-(
-			let doc = (table === 'packs') ? readpack(docid) : game[table]?.get(docid);
-			if (doc) extratext = getField(doc, FieldOfDocument[doctype]);
-			if (extratext) {
-				if (extratext.startsWith('<p>') && extratext.endsWith('</p>') &&
-					extratext.lastIndexOf('<p>') === 0) {0
-					extratext = `<span class="inlineDocument inline${doctype}">` + extratext.slice(3, -4) + '</span>';
-				} else {
-					extratext = `<div class="inlineDocument inline${doctype}">` + extratext + '</div>';
+			let doc;
+			if (table === 'packs') {
+				doc = readpack(docid);
+				if (doc && !(doc instanceof Promise)) {
+					doctype = doc.type;
+					doc = doc.document;
+				}
+			 } else {
+				doc = game[table]?.get(docid);
+			 }
+			 if (doc instanceof Promise) {
+				extratext = DEFERRED_MSG;
+			 } else {
+				if (doc) extratext = getField(doc, FieldOfDocument[doctype]);
+				if (extratext) {
+					if (extratext.startsWith('<p>') && extratext.endsWith('</p>') &&
+						extratext.lastIndexOf('<p>') === 0) {
+						extratext = `<span class="inlineDocument inline${doctype}">` + extratext.slice(3, -4) + '</span>';
+					} else {
+						extratext = `<div class="inlineDocument inline${doctype}">` + extratext + '</div>';
+					}
 				}
 			}
 		}
@@ -95,7 +119,5 @@ function _doEnrich(wrapped, content, options) {
 }
 
 Hooks.once('ready', () => {
-	// Only check for link visibility if NOT a gm
-	console.warn(`inline-linktext: ready hook`);
 	libWrapper.register('inline-linktext', 'TextEditor.enrichHTML', _doEnrich, 'WRAPPER');
 })

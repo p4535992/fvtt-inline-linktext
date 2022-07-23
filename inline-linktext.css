@@ -8,3 +8,7 @@ span.inlineDocument {
 .inlineDocument .inlineDocument {
     background: lightblue;
 }
+.inlineReload {
+    font-style: 'italic';
+    background: #e00000;
+}
