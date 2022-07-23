@@ -11,7 +11,11 @@ This module allows @inline<Document>[id]{label} to be used to put one field from
 
 ## Limitation
 
-It does not work with @Compendium[...]{...} because of the ASYNChronous nature of accessing the contents of compendiums.
+When @inlineCompendium is used, the first time the document is opened a placeholder will be displayed. Re-opening the document should display the correct text. (This is required because the compendium entry(ies) need to be read from the server before they can be used).
+
+## Configuration
+
+In the module settings, you can define which field is read from each document type. These are likely to be specific to each game-system.
 
 ## Support
 
