@@ -1,0 +1,14 @@
+{
+    "INLINELINKTEXT.SettingsJournalEntryTitle": "Field in JournalEntry",
+    "INLINELINKTEXT.SettingsJournalEntryHint": "The field within a JournalEntry from which the text will be taken",
+    "INLINELINKTEXT.SettingsActorTitle": "Field in Actor",
+    "INLINELINKTEXT.SettingsActorHint":  "The field within a Actor from which the text will be taken",
+    "INLINELINKTEXT.SettingsRollTableTitle": "Field in RollTable",
+    "INLINELINKTEXT.SettingsRollTableHint":  "The field within a RollTable from which the text will be taken",
+    "INLINELINKTEXT.SettingsSceneTitle":  "Field in Scene",
+    "INLINELINKTEXT.SettingsSceneHint":   "The field within a Scene from which the text will be taken",
+    "INLINELINKTEXT.SettingsItemTitle":   "Field in Item",
+    "INLINELINKTEXT.SettingsItemHint":   "The field within a Item from which the text will be taken",
+    "INLINELINKTEXT.CompendiumPlaceholderTitle": "Awaiting Compendium Placeholder",
+    "INLINELINKTEXT.CompendiumPlaceholderHint": "The HTML to be inserted when the linked compendium data is not immediately available"
+}

@@ -23,6 +23,13 @@
     "styles": [
         "inline-linktext.css"
     ],
+    "languages": [
+        {
+            "lang": "en",
+            "Name": "English",
+            "path": "lang/en.json"
+        }
+    ],
     "dependencies": [
         {
             "name": "lib-wrapper"

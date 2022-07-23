@@ -4,6 +4,8 @@
 //
 // It isn't possible to get @inlineCompendium[id] to work because it requires ASYNChronous access.
 //
+const MODULE_NAME = 'inline-linktext';
+
 const _EntityMap = {
 	"JournalEntry" : "journal",
 	"Actor"        : "actors",
@@ -21,7 +23,7 @@ let FieldOfDocument = {
 	"Item"         : "data.data.description",
 }
 
-const DEFERRED_MSG = '<span class="inlineReload">{Reload to read text from Compendium}</span>';
+let DEFERRED_MSG = '{Reload to read text from Compendium}';
 
 function getField(document, fieldstring)
 {
@@ -67,7 +69,7 @@ function readpack(docid)
  * @param {string} [content]  unicode string as stored in db
  * @param {Object} [options]  Data for renderJournalSheet and renderActorSheet hooks
  */
-function _doEnrich(wrapped, content, options) {	
+function _doEnrich(wrapped, content, options) {
 	// Replace all occurrences of @inlineDocument[...]{...]} to @Document[...]{...}<+ text from referenced document>
 	// Outer while loop caters for processing of nested @inline statements
 	while (content.includes('@inline'))
@@ -96,7 +98,7 @@ function _doEnrich(wrapped, content, options) {
 				doc = game[table]?.get(docid);
 			 }
 			 if (doc instanceof Promise) {
-				extratext = DEFERRED_MSG;
+				extratext = `<span class="inlineReload">${DEFERRED_MSG}</span>`;
 			 } else {
 				if (doc) extratext = getField(doc, FieldOfDocument[doctype]);
 				if (extratext) {
@@ -120,4 +122,37 @@ function _doEnrich(wrapped, content, options) {
 
 Hooks.once('ready', () => {
 	libWrapper.register('inline-linktext', 'TextEditor.enrichHTML', _doEnrich, 'WRAPPER');
+})
+
+
+//
+// SETTINGS
+//
+
+Hooks.once('init', () => {
+	console.error('INLINE-LINK-TEXT - SETTINGS');
+	Object.keys(FieldOfDocument).forEach(k => {
+		game.settings.register(MODULE_NAME, k, {
+			name: game.i18n.localize(`INLINELINKTEXT.Settings${k}Title`),
+			hint: game.i18n.localize(`INLINELINKTEXT.Settings${k}Hint`),
+			scope: 'world',
+			config: true,
+			default: FieldOfDocument[k],
+			type: String,
+			onChange: value => { FieldOfDocument[k] = value }
+
+		});
+		FieldOfDocument[k] = game.settings.get(MODULE_NAME, k);
+	});
+
+	game.settings.register(MODULE_NAME, 'DEFERRED_MSG', {
+		name: game.i18n.localize(`INLINELINKTEXT.CompendiumPlaceholderTitle`),
+		hint: game.i18n.localize(`INLINELINKTEXT.CompendiumPlaceholderHint`),
+		scope: 'world',
+		config: true,
+		default: DEFERRED_MSG,
+		type: String,
+		onChange : value => { DEFERRED_MSG = value }
+	});
+	DEFERRED_MSG = game.settings.get(MODULE_NAME, 'DEFERRED_MSG');
 })
