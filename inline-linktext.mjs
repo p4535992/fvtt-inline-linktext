@@ -18,8 +18,19 @@ const _EntityMap = {
 
 let FieldOfDocument = {};
 
+const DISPLAY_SENTENCE  = 0;
+const DISPLAY_PARAGRAPH = 1;
+const DISPLAY_ALL       = 2;
+let DisplayAmount = DISPLAY_ALL;
+
 let DEFERRED_MSG = '{Reload to read text from Compendium}';
 
+/**
+ * 
+ * @param {*} document The Object to be interrogated
+ * @param {*} fieldstring A dot-separated list of fields of descendents (Array indices as separate fields)
+ * @returns 
+ */
 function getField(document, fieldstring)
 {
 	let parts = fieldstring.split('.');
@@ -104,12 +115,34 @@ function _doEnrich(wrapped, content, options) {
 				extratext = `<span class="inlineReload">${DEFERRED_MSG}</span>`;
 			 } else {
 				if (doc) extratext = getField(doc, FieldOfDocument[doctype]);
-				if (extratext) {
-					if (extratext.startsWith('<p>') && extratext.endsWith('</p>') &&
-						extratext.lastIndexOf('<p>') === 0) {
-						extratext = `<span class="inlineDocument inline${doctype}">` + extratext.slice(3, -4) + '</span>';
-					} else {
+				if (extratext?.length > 0) {
+					if (!extratext.startsWith('<')) {
+						// No HTML formatting, so put it in a single span
+						extratext = `<span class="inlineDocument inline${doctype}">` + extratext + '</span>';
+					} else if (extratext.startsWith('<p>') && 
+							extratext.endsWith('</p>') &&
+						 	extratext.lastIndexOf('<p>') === 0) {
+						// A single paragraph, so put it in a single span
+						extratext = extratext.slice(3, -4);
+						if (DisplayAmount == DISPLAY_SENTENCE) {
+							let dot = extratext.indexOf('.');
+							if (dot > 0) extratext = extratext.slice(0,dot+1);
+						}
+						extratext = `<span class="inlineDocument inline${doctype}">` + extratext + '</span>';
+					} else if (DisplayAmount === DISPLAY_ALL) {
+						// More than one paragraph, so put it in a DIV
 						extratext = `<div class="inlineDocument inline${doctype}">` + extratext + '</div>';
+					} else {
+						let p1 = extratext.indexOf('<p>');
+						let p2 = extratext.indexOf('</p>');
+						// Reduce to only first paragraph - it might not be at the very start of the text
+						extratext = extratext.slice(p1+3,p2);
+						if (DisplayAmount === DISPLAY_SENTENCE) {
+							// Reduce to only first sentence
+							let dot = extratext.indexOf('.');
+							if (dot > 0) extratext = extratext.slice(0,dot+1);	
+						}
+						extratext = `<span class="inlineDocument inline${doctype}">` + extratext + '</span>';
 					}
 				}
 			}
@@ -148,6 +181,24 @@ Hooks.once('init', () => {
 		});
 		FieldOfDocument[k] = game.settings.get(MODULE_NAME, k);
 	});
+
+	game.settings.register(MODULE_NAME, 'DisplayAmount', {
+		name: game.i18n.localize(`INLINELINKTEXT.CompendiumPlaceholderTitle`),
+		hint: game.i18n.localize(`INLINELINKTEXT.CompendiumPlaceholderHint`),
+		scope: 'world',
+		config: true,
+		type: String,
+		choices: {
+			[DISPLAY_ALL]       : game.i18n.localize(`INLINELINKTEXT.DISPLAY_ALL`),
+			[DISPLAY_PARAGRAPH] : game.i18n.localize(`INLINELINKTEXT.DISPLAY_PARAGRAPH`),
+			[DISPLAY_SENTENCE]  : game.i18n.localize(`INLINELINKTEXT.DISPLAY_SENTENCE`),
+		},
+		default: DISPLAY_ALL,
+		onChange : value => { 
+			DisplayAmount = +value 
+		}
+	});
+	DisplayAmount = +game.settings.get(MODULE_NAME, 'DisplayAmount');
 
 	game.settings.register(MODULE_NAME, 'DEFERRED_MSG', {
 		name: game.i18n.localize(`INLINELINKTEXT.CompendiumPlaceholderTitle`),
