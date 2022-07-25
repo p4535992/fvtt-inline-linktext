@@ -29,7 +29,7 @@ When first enabled, the default settings for the world's game system will be loa
 
 ## Support
 
-If your preferred game system is not directly supported, then raise an issue at https://github.com/farling42/fvtt-inline-linktext/issues and I will see what I can do about that.
+If your preferred game system is not directly supported, then raise an issue at https://github.com/farling42/fvtt-inline-linktext/issues and I will see what I can do about that. (If you can provide your configured data field settings then that would be even better.)
 
 ## Support
 
