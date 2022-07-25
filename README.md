@@ -7,7 +7,7 @@
 
 ## Introduction
 
-This module allows @inline<Document>[id]{label} to be used to put one field from the referenced document inline in the current document.
+This module allows @inline\<Document>[id]{label} to be used to put one field from the referenced document inline in the current document.
 
 By configuration, you can choose whether to include the entire description text from the linked entity, only the first paragraph from the linked entity, or only the first sentence from the first paragraph of the linked entity.
 
