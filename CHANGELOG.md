@@ -4,6 +4,8 @@ Provide default settings based on the game system.
 
 Provide option to take either only the first SENTENCE, the first PARAGRAPH, or ALL of the content from the linked entity.
 
+Add default fields for game systems: cyphersystem, pf1, pf2e, dnd5e
+
 ## 0.2
 
 Initial release that allows @inline<Document> instead of just @<Document> to put one field from the referenced object inline in the current text (immediately AFTER the link).
