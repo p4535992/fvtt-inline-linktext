@@ -1,11 +1,16 @@
 {
     "name": "inline-linktext",
+    "id": "inline-linktext",
     "title": "Inline Text from Linked Things",
     "description": "Places text from linked items directly into the linking text.",
     "version": "0.1",
     "author": "Farling",
     "minimumCoreVersion": "9",
-    "compatibleCoreVersion": "9",
+    "compatibleCoreVersion": "10",
+    "compatibility": {
+        "minimum": 9,
+        "verified": "10.275"
+    },
     "authors": [
         {
             "name": "Farling",
@@ -37,6 +42,13 @@
             "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json"
         }
     ],
+    "relationships": {
+        "requires": [{
+            "id": "lib-wrapper",
+            "type": "module",
+            "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json"
+        }]
+    },
     "flags": {
         "fvttdevleague": {
             "package-jam": 2022
