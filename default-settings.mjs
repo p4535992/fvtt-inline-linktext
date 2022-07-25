@@ -12,7 +12,28 @@ const fvtt_9_settings = {
         "JournalEntry" : "data.content",
         "RollTable"    : "description",
         "Scene"        : "name",
-    }
+    },
+    "dnd5e" : {
+        "Actor"        : "data.data.details.biography.value",
+        "Item"         : "data.data.description.value",
+        "JournalEntry" : "data.content",
+        "RollTable"    : "description",
+        "Scene"        : "name",
+    },
+    "pf1" : {
+        "Actor"        : "data.data.details.notes.value",
+        "Item"         : "data.data.description.value",
+        "JournalEntry" : "data.content",
+        "RollTable"    : "description",
+        "Scene"        : "name",
+    },
+    "pf2e" : {
+        "Actor"        : "data.data.details.biography.backstory",
+        "Item"         : "data.data.description.value",
+        "JournalEntry" : "data.content",
+        "RollTable"    : "description",
+        "Scene"        : "name",
+    },
 };
 
 //
@@ -25,7 +46,28 @@ const fvtt_10_settings = {
         "JournalEntry" : "pages.contents.0.text.content",
         "RollTable"    : "description",
         "Scene"        : "name",
-    }
+    },
+    "dnd5e" : {
+        "Actor"        : "system.details.biography.value",
+        "Item"         : "system.description.value",
+        "JournalEntry" : "pages.contents.0.text.content",
+        "RollTable"    : "description",
+        "Scene"        : "name",
+    },
+    "pf1" : {
+        "Actor"        : "system.details.notes.value",
+        "Item"         : "system.description.value",
+        "JournalEntry" : "pages.contents.0.text.content",
+        "RollTable"    : "description",
+        "Scene"        : "name",
+    },
+    "pf2e" : {
+        "Actor"        : "system.details.biography.backstory",
+        "Item"         : "system.description.value",
+        "JournalEntry" : "pages.contents.0.text.content",
+        "RollTable"    : "description",
+        "Scene"        : "name",
+    },
 };
 
 const settings = {
@@ -34,13 +76,23 @@ const settings = {
 }
 
 const default_settings = {
-	"Actor"        : "data.data.description",
-	"Item"         : "data.data.description",
-	"JournalEntry" : "data.content",
-	"RollTable"    : "description",
-	"Scene"        : "name",
+    "9" : {
+	    "Actor"        : "data.data.description",
+	    "Item"         : "data.data.description",
+	    "JournalEntry" : "data.content",
+	    "RollTable"    : "description",
+	    "Scene"        : "name",
+    },
+    "10" : {
+	    "Actor"        : "system.description",
+	    "Item"         : "system.description",
+	    "JournalEntry" : "pages.contents.0.text.content",
+	    "RollTable"    : "description",
+	    "Scene"        : "name",
+    }
 }
 
 export default function defaultSettings() {
-    return settings[game.version.split('.')[0]]?.[game.system.id] || default_settings;
+    let ver = game.version.split('.')[0];
+    return settings[ver]?.[game.system.id] || default_settings[ver];
 }
