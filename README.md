@@ -15,6 +15,12 @@ By configuration, you can choose whether to include the entire description text 
 
 When @inlineCompendium is used, the first time the document is opened a placeholder will be displayed. Re-opening the document should display the correct text. (This is required because the compendium entry(ies) need to be read from the server before they can be used).
 
+## Installation
+
+Simply select the module from Foundry's Add-On Modules window, or you can install it manually using the following link:
+
+https://github.com/farling42/fvtt-inline-linktext/releases/latest/download/module.json
+
 ## Configuration
 
 In the module settings, you can define which field is read from each document type.
