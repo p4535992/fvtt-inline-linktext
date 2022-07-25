@@ -1,4 +1,8 @@
-## 0.1
+## 0.3
+
+Provide default settings based on the game system.
+
+## 0.2
 
 Initial release that allows @inline<Document> instead of just @<Document> to put one field from the referenced object inline in the current text (immediately AFTER the link).
 

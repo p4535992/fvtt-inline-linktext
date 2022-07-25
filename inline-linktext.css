@@ -1,5 +1,6 @@
 .inlineDocument {
     background: lightgreen;
+    color: black;
 }
 span.inlineDocument {
     margin-left: 0.5em;
@@ -7,8 +8,10 @@ span.inlineDocument {
 }
 .inlineDocument .inlineDocument {
     background: lightblue;
+    color: black;
 }
 .inlineReload {
     font-style: 'italic';
     background: #ff8080;
+    color: black;
 }

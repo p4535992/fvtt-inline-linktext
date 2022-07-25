@@ -1,9 +1,10 @@
-//
 // Allows the use of @inlineItem[id]   or other @inlineDocument[id] to put one of the fields from that item/document
 // inline in another document.
 //
 // It isn't possible to get @inlineCompendium[id] to work because it requires ASYNChronous access.
-//
+
+import defaultSettings from './default-settings.mjs';
+
 const MODULE_NAME = 'inline-linktext';
 
 const _EntityMap = {
@@ -15,13 +16,7 @@ const _EntityMap = {
 	"Compendium"   : "packs",   // Getting the contents is ASYNC, so won't work for a synchronous enrichHTML
 };
 
-let FieldOfDocument = {
-	"JournalEntry" : "data.content",
-	"Actor"        : "data.data.description",
-	"RollTable"    : "data.data.description",
-	"Scene"        : "data.data.description",
-	"Item"         : "data.data.description",
-}
+let FieldOfDocument = {};
 
 let DEFERRED_MSG = '{Reload to read text from Compendium}';
 
@@ -72,7 +67,7 @@ function readpack(docid)
 function _doEnrich(wrapped, content, options) {
 	// Replace all occurrences of @inlineDocument[...]{...]} to @Document[...]{...}<+ text from referenced document>
 	// Outer while loop caters for processing of nested @inline statements
-	while (content.includes('@inline'))
+	while (content?.includes('@inline'))
 	{
 		const regex = /@inline([a-zA-Z]+)\[([a-zA-Z0-9.-]+)\]{[^}]+}/;
 		let found = content.match(regex);
@@ -80,8 +75,16 @@ function _doEnrich(wrapped, content, options) {
 
 		let extratext="";
 		const matching = found[0];	// full matching string
-		let   doctype  = found[1];	// the type of document that has been inlined	
-		const docid    = found[2];	// the ID of the thing that is being inline
+		let   doctype  = found[1];	// the type of document that has been inlined
+		let   docid    = found[2];	// the ID of the thing that is being inline
+		if (doctype === 'UUID') {
+			// Foundry V10 contains @UUID[Item.id]
+			let dot = docid.indexOf('.');
+			if (dot) {
+				doctype = docid.slice(0,dot);
+				docid   = docid.slice(dot+1);
+			}
+		}
 		const table = _EntityMap[doctype];
 		if (table)
 		{
@@ -131,13 +134,14 @@ Hooks.once('ready', () => {
 
 Hooks.once('init', () => {
 	console.error('INLINE-LINK-TEXT - SETTINGS');
-	Object.keys(FieldOfDocument).forEach(k => {
+	const default_settings = defaultSettings();
+	Object.keys(default_settings).forEach(k => {
 		game.settings.register(MODULE_NAME, k, {
 			name: game.i18n.localize(`INLINELINKTEXT.Settings${k}Title`),
 			hint: game.i18n.localize(`INLINELINKTEXT.Settings${k}Hint`),
 			scope: 'world',
 			config: true,
-			default: FieldOfDocument[k],
+			default: default_settings[k],
 			type: String,
 			onChange: value => { FieldOfDocument[k] = value }
 

@@ -18,6 +18,7 @@
         }
     ],
     "esmodules": [
+        "default-settings.mjs",
         "inline-linktext.mjs"
     ],
     "styles": [
