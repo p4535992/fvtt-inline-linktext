@@ -1,6 +1,8 @@
 {
     "INLINELINKTEXT.SettingsJournalEntryTitle": "Field in JournalEntry",
     "INLINELINKTEXT.SettingsJournalEntryHint": "The field within a JournalEntry from which the text will be taken",
+    "INLINELINKTEXT.SettingsJournalEntryPageTitle": "Field in JournalEntryPage",
+    "INLINELINKTEXT.SettingsJournalEntryPageHint": "The field within a JournalEntryPage from which the text will be taken",
     "INLINELINKTEXT.SettingsActorTitle": "Field in Actor",
     "INLINELINKTEXT.SettingsActorHint":  "The field within a Actor from which the text will be taken",
     "INLINELINKTEXT.SettingsRollTableTitle": "Field in RollTable",

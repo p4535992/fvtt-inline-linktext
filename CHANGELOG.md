@@ -1,3 +1,25 @@
+## 0.5
+
+0.5 onwards supports Only Foundry V10.
+
+Inline text will only work when TextEditor.enrichHTML is called with "async:true" (this is the default for core Foundry functionality).
+
+Handle @includeUUID properly, including linking to sections within a journal entry.
+
+When linking to a section within a journal page, with the Sentence/Paragraph/All module setting set to "All" then the entirety of the header and all sub-sections will be inlined (sub-sections are read until a header is found at the same level or higher as the linked section).
+
+Remove the "placeholder" configuration setting, since being async means that entries from compendiums will always be inline properly.
+
+Changed init message from error to debug.
+
+## 0.4
+
+Game-system specific configurations provided: currently cyphersystem, pf1, pf2e, dnd5e
+
+Option to display either ALL the field from the linked entity, or only the first paragraph, or only the first sentence from the first paragraph.
+
+Supports both Foundry V9 and Foundry V10.
+
 ## 0.3
 
 Provide default settings based on the game system.
