@@ -1,3 +1,7 @@
+## 0.5.1
+
+Change minimum compatible version to 10
+
 ## 0.5
 
 0.5 onwards supports Only Foundry V10.

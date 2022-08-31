@@ -5,7 +5,7 @@
     "description": "Places text from linked items directly into the linking text.",
     "version": "0.1",
     "author": "Farling",
-    "minimumCoreVersion": "9",
+    "minimumCoreVersion": "10",
     "compatibleCoreVersion": "10",
     "compatibility": {
         "minimum": "10",
