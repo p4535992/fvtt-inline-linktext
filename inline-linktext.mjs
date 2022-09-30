@@ -24,22 +24,6 @@ let DisplayAmount = DISPLAY_ALL;
 
 /**
  * 
- * @param {*} document The Object to be interrogated
- * @param {*} fieldstring A dot-separated list of fields of descendents (Array indices as separate fields)
- * @returns 
- */
-function getField(document, fieldstring)
-{
-	let parts = fieldstring.split('.');
-	for (let part of parts) {
-		document = document[part];
-		if (!document) break;
-	}
-	return document;
-}
-
-/**
- * 
  * @param {string} docid The id-string as used in @Compendium[...] marker.
  * @returns Promise containing the Document retrieved from the compendium
  */
@@ -144,7 +128,7 @@ async function _myenrichHTMLasync(wrapped, content, options) {
 		if (doc) {
 			let doctype = doc.constructor.name;  // Get the type of "doc"
 
-			if (doc) extratext = getField(doc, FieldOfDocument[doctype]);
+			extratext = getProperty(doc, FieldOfDocument[doctype]);
 			if (extratext.length > 0) {
 				// Find the correct section
 				if (section) {
