@@ -7,7 +7,7 @@
 
 ## Introduction
 
-This module allows `@inline\<Document>[id]{label}` to be used to put one field from the referenced document inline in the current document.
+This module allows `@inline<Document>[id]{label}` to be used to put one field from the referenced document inline in the current document.
 
 E.g. `@inlineJournalEntry[id]{label}`  will put the usual button for the link followed by the text from the indicated journal entry.
 
@@ -15,7 +15,7 @@ By configuration, you can choose whether to include the entire description text 
 
 ## Limitation in Foundry V9
 
-When @inlineCompendium is used, the first time the document is opened a placeholder will be displayed. Re-opening the document should display the correct text. (This is required because the compendium entry(ies) need to be read from the server before they can be used).
+When `@inlineCompendium` is used, the first time the document is opened a placeholder will be displayed. Re-opening the document should display the correct text. (This is required because the compendium entry(ies) need to be read from the server before they can be used).
 
 ## Installation
 
