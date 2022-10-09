@@ -22,6 +22,16 @@ const DISPLAY_PARAGRAPH = 1;
 const DISPLAY_ALL       = 2;
 let DisplayAmount = DISPLAY_ALL;
 
+function getType(doc)
+{
+	if (doc instanceof Actor)        return "Actor";
+	if (doc instanceof RollTable)    return "RollTable";
+	if (doc instanceof Scene)        return "Scene";
+	if (doc instanceof Item)         return "Item";
+	if (doc instanceof JournalEntry)     return "JournalEntry";
+	if (doc instanceof JournalEntryPage) return "JournalEntryPage";
+}
+
 /**
  * 
  * @param {string} docid The id-string as used in @Compendium[...] marker.
@@ -126,10 +136,17 @@ async function _myenrichHTMLasync(wrapped, content, options) {
 
 		let extratext="";
 		if (doc) {
-			let doctype = doc.constructor.name;  // Get the type of "doc"
+			let doctype = getType(doc);  // Get the type of "doc"
 
-			extratext = getProperty(doc, FieldOfDocument[doctype]);
-			if (extratext.length > 0) {
+			// We can't access 'pages.contents.0' with getProperty
+			if (doctype == 'JournalEntry' && doc.pages && FieldOfDocument[doctype].startsWith('pages.contents')) {
+				doctype = 'JournalEntryPage';
+				doc = doc.pages.contents[0];
+			}
+
+			const propvalue = getProperty(doc, FieldOfDocument[doctype]);
+			if (propvalue?.length > 0) {
+				extratext = propvalue;
 				// Find the correct section
 				if (section) {
 					// Search extratext for any heading whose converted value matches section
