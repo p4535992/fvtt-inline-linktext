@@ -3,7 +3,7 @@
 ## 0.5.2
 
 - Ensure that document types are detected properly.
-- In Foundry V10, ensure that if `JournalEntry` is configured to display pages.contents, then the first page in the journal is selected and then handled as for `JournalEntryPage`.
+- In Foundry V10, ensure that if `JournalEntry` is configured to display `pages.contents...`, then the first page in the journal is selected and then handled as for `JournalEntryPage`.
 
 ## 0.5.1
 
