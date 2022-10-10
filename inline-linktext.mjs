@@ -22,43 +22,6 @@ const DISPLAY_PARAGRAPH = 1;
 const DISPLAY_ALL       = 2;
 let DisplayAmount = DISPLAY_ALL;
 
-function getType(doc)
-{
-	if (doc instanceof Actor)        return "Actor";
-	if (doc instanceof RollTable)    return "RollTable";
-	if (doc instanceof Scene)        return "Scene";
-	if (doc instanceof Item)         return "Item";
-	if (doc instanceof JournalEntry)     return "JournalEntry";
-	if (doc instanceof JournalEntryPage) return "JournalEntryPage";
-}
-
-/**
- * 
- * @param {string} docid The id-string as used in @Compendium[...] marker.
- * @returns Promise containing the Document retrieved from the compendium
- */
-async function readpack(docid)
-{
-	const mark = docid.lastIndexOf('.');
-	if (mark>0) {
-		const packname = docid.slice(0,mark);
-		const packid   = docid.slice(mark+1);
-		// only getDocument is async
-		const pack = game.packs.get(packname);
-		if (pack) {
-			const cached = pack.get(packid);
-			if (cached instanceof foundry.abstract.Document) 
-				return {
-					"type": pack.metadata.type,
-					"document": cached
-				};
-			else
-				return await pack.getDocument(packid);
-		}
-	}
-	return undefined;
-}
-
 function findSection(html,sectionid) {
 	let result="";
 	if (html.hasChildNodes()) {
@@ -113,30 +76,25 @@ async function _myenrichHTMLasync(wrapped, content, options) {
 		}
 
 		const matching = found[0];	// full matching string
-		let   doctype  = found[1];	// the type of document that has been inlined
-		let   docid    = found[2];	// the ID of the thing that is being inline
+		const linktype = found[1];	// the type of document that has been inlined
+		const docid    = found[2];	// the ID of the thing that is being inline
 		let doc;
-		if (doctype === 'UUID') {
+		if (linktype === 'UUID') {
 			// Foundry V10 contains @UUID[Item.id]
 			// Optional #page at end
 			doc = await fromUuid(docid);
 		}
-		else if (doctype == 'Compendium') {
-			// V9-style link format
-			doc = await readpack(docid);
-			if (doc) {
-				doctype = doc.type;
-				doc = doc.document;
-			}
+		else if (linktype == 'Compendium') {
+			doc = await fromUuid(`Compendium.${docid}`);
 		} else {
 			// V9-style link format
-			const table = _EntityMap[doctype];
+			const table = _EntityMap[linktype];
 			if (table) doc = game[table]?.get(docid);
 		}
 
 		let extratext="";
 		if (doc) {
-			let doctype = getType(doc);  // Get the type of "doc"
+			let doctype = doc.documentName;  // Get the type of "doc"
 
 			// We can't access 'pages.contents.0' with getProperty
 			if (doctype == 'JournalEntry' && doc.pages && FieldOfDocument[doctype].startsWith('pages.contents')) {
@@ -201,7 +159,8 @@ async function _myenrichHTMLasync(wrapped, content, options) {
 
 // Non-async outer wrapper just in case enrichHTML is called with (async=false)
 function _myenrichHTML(wrapped, content, options) {
-	if (options.async) 
+	if (options.async)
+		// Pass the enclosing promise back to the caller
 		return _myenrichHTMLasync(wrapped, content, options);
 	else {
 		console.warn('inline-linktext can NOT process calls to enrichHTML which are not async');
