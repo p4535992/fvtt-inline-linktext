@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.6.0
+
+- Ensure that inline text appears the first time that a compendium document is referenced.
+- Optimise code for Foundry V10
+
 ## 0.5.2
 
 - Ensure that document types are detected properly.

@@ -13,10 +13,6 @@ E.g. `@inlineJournalEntry[id]{label}`  will put the usual button for the link fo
 
 By configuration, you can choose whether to include the entire description text from the linked entity, only the first paragraph from the linked entity, or only the first sentence from the first paragraph of the linked entity.
 
-## Limitation in Foundry V9
-
-When `@inlineCompendium` is used, the first time the document is opened a placeholder will be displayed. Re-opening the document should display the correct text. (This is required because the compendium entry(ies) need to be read from the server before they can be used).
-
 ## Installation
 
 Simply select the module from Foundry's Add-On Modules window, or you can install it manually using the following link:
