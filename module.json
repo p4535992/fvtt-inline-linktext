@@ -3,13 +3,13 @@
     "id": "inline-linktext",
     "title": "Inline Text from Linked Things",
     "description": "Places text from linked items directly into the linking text.",
-    "version": "0.1",
+    "version": "0.7.0",
     "author": "Farling",
     "minimumCoreVersion": "10",
     "compatibleCoreVersion": "10",
     "compatibility": {
         "minimum": "10",
-        "verified": "10.275"
+        "verified": "10.288"
     },
     "authors": [
         {

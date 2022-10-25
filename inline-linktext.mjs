@@ -188,8 +188,15 @@ Hooks.once('init', () => {
 			config: true,
 			default: default_settings[k],
 			type: String,
-			onChange: value => { FieldOfDocument[k] = value }
-
+			onChange: value => { 
+				if (value)
+					FieldOfDocument[k] = value 
+				else {
+					// If left blank, use the default value
+					value = default_settings[k];
+					game.settings.set(MODULE_NAME, k, value)
+				}
+			}
 		});
 		FieldOfDocument[k] = game.settings.get(MODULE_NAME, k);
 	});
