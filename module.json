@@ -1,8 +1,8 @@
 {
     "name": "inline-linktext",
     "id": "inline-linktext",
-    "title": "Inline Text from Linked Things",
-    "description": "Places text from linked items directly into the linking text.",
+    "title": "Inline Text from Linked Document",
+    "description": "Places text from linked documents directly into the linking text.",
     "version": "0.7.0",
     "author": "Farling",
     "minimumCoreVersion": "10",
