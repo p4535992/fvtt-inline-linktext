@@ -80,12 +80,12 @@ async function _myenrichHTMLasync(wrapped, content, options) {
 		const docid    = found[2];	// the ID of the thing that is being inline
 		let doc;
 		if (linktype === 'UUID') {
-			// Foundry V10 contains @UUID[Item.id]
+			// Foundry V10 contains @UUID[Item.id] or a relative link as UUID[.Item.id]
 			// Optional #page at end
-			doc = await fromUuid(docid);
+			doc = await fromUuid(docid, options?.relativeTo);
 		}
 		else if (linktype == 'Compendium') {
-			doc = await fromUuid(`Compendium.${docid}`);
+			doc = await fromUuid(`Compendium.${docid}`);  // always an absolute id
 		} else {
 			// V9-style link format
 			const table = _EntityMap[linktype];

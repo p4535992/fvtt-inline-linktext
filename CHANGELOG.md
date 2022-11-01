@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.7.1
+
+- Ensure that relative `@UUID` links work in Foundry V10
+
 ## 0.7.0
 
 - Provide the option to leave the Field settings blank in order to restore the default values for the version of Foundry being used.
